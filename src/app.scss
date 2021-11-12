@@ -16,7 +16,7 @@ $primary: #ff3e00;
   text-decoration: none;
   border: none;
 }
-
+.model
  /* The sidebar menu */
 .sidenav {
   height: 100%;    /* Full-height: remove this if you want "auto" height */
@@ -28,6 +28,10 @@ $primary: #ff3e00;
   background-color: $primary;
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
+}
+.modal-dialog{
+  min-width: 80%; width: auto;
+  min-height: 80%; height: auto;
 }
 
 .sidenav a {
