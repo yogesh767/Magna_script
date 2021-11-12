@@ -1,5 +1,4 @@
-<script lang="ts">
-  import * as js from 'jquery';
+<script>
   import {
     Button,
     Modal,
@@ -7,21 +6,25 @@
     ModalFooter,
     ModalHeader,
     Figure,
-    Image
+    Image,
   } from "sveltestrap";
   import { onMount, tick } from "svelte";
- 
+  let fullscreen;
   export let _id;
-  export let  image;
+  export let title
+  export let image;
   let open = false;
-  const toggle = () => (open = !open);
-  let title;
-
+  const toggle = async() => {
+    fullscreen = true;
+    open = !open;
+    await tick()
+    initImageMaker();
+  };
   const saveImage = async (e) => {
     e.preventDefault();
     toggle();
     console.log("title", title);
-    
+
     // let res = await fetch("api/chapters/addChapter", {
     //   method: "POST",
     //   body: JSON.stringify({ title }),
@@ -32,33 +35,30 @@
     // title="";
     // if (res.ok) {
     //  alert("added chapter successfully");
-      
+
     // }
   };
+  const initImageMaker =()=>{
+    const abc = _$(".image").html();
+   
+     _$(".image").imageMaker({
+      templates: [{ url: image, title: title }],
+      downloadGeneratedImage:false,
+      merge_image_thumbnail_width:500,
+      merge_image_thumbnail_height:500
+      })
+  }
   onMount(async function () {
-    const abc=_$("#image").text()
-    console.log("abc",abc)
-  //   _$("#image").imageMaker({
-  //     merge_images:[
-  //   {url:image, title:title},
-  // ],
-
-
-  //   });
+    initImageMaker()
   });
 </script>
 
 <div style="margin:1rem 0 1rem 0.5rem">
-  <Button  color="primary" on:click={toggle}>Edit Image</Button >
-  <Modal isOpen={open} {toggle}>
+  <Button color="primary" on:click={toggle}>Edit Image</Button>
+  <Modal isOpen={open} {toggle} class="modal-content">
     <ModalHeader {toggle}>Edit Image</ModalHeader>
     <ModalBody>
-      <Figure caption="Add text box ">
-        <div id="image">
-          hello
-        </div>
-        <Image fluid alt="Landscape" src={image} />
-      </Figure>
+      <div class="image"></div>
     </ModalBody>
     <ModalFooter>
       <Button color="primary" on:click={saveImage}>Save</Button>
@@ -66,3 +66,6 @@
     </ModalFooter>
   </Modal>
 </div>
+<style>
+ 
+</style>
